@@ -18,7 +18,7 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         app.get("example-endpoint", this::exampleHandler);
 
-        return app;
+        return  app;
     }
 
     /**

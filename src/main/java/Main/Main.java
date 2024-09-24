@@ -1,3 +1,5 @@
+package Main;
+
 import Controller.SocialMediaController;
 import io.javalin.Javalin;
 import io.javalin.http.Context;

@@ -1,5 +1,7 @@
 package Controller;
 
+import Main.Main;
+
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,7 +34,7 @@ public class SocialMediaController {
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
     //Determine whether handlers should have test implementation
-    public static boolean test = true;
+    boolean test = Main.handlerTests;
     //Handler method implementation
     public void registerUserHandler(Context ctx) throws JsonProcessingException {
         //Test if handler testing activated 

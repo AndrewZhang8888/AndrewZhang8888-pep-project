@@ -7,10 +7,12 @@ import java.sql.*;
 
 
 public class AccountDAO{
+    public static boolean test = true;
 
+    //User Story 1 method
     public Account registerNewAccount(Account acct){
         Connection conn = ConnectionUtil.getConnection();
-        if (checkAccountExists(acct)==false){
+        if (checkAccountExists(acct)==false && !acct.getUsername().isEmpty() && acct.getPassword().length()>=4){
             try {
                 String sql = "INSERT INTO account (username,password) VALUES (?,?)";
                 PreparedStatement ps = conn.prepareStatement(sql);
@@ -29,6 +31,7 @@ public class AccountDAO{
         return null;
     }
 
+    //User Story 2 method
     public boolean checkAccountExists(Account acct){
         Connection conn = ConnectionUtil.getConnection();
         try{
@@ -36,6 +39,23 @@ public class AccountDAO{
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, acct.getUsername());
             ps.setString(2, acct.getPassword());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                return true;
+            }
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+    //User Story 3 method 
+    public boolean checkAccountExistsByID(int id){
+        Connection conn = ConnectionUtil.getConnection();
+        try{
+            String sql = "SELECT * FROM account WHERE account_id=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
                 return true;

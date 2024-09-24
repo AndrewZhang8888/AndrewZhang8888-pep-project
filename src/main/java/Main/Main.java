@@ -1,8 +1,12 @@
 package Main;
 
-import Controller.SocialMediaController;
+import DAO.*;
+import Model.*;
+import Controller.*;
+
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+
 
 /**
  * This class is provided with a main method to allow you to manually run and test your application. This class will not
@@ -18,8 +22,14 @@ public class Main {
         Javalin app = controller.startAPI();
         app.start(8080);
 
+        //DAO Implementation Manual Tests
+        if(daoTests){
+            AccountDAO dao = new AccountDAO();
+            Account acct = new Account("china4004", "4004" );
+            dao.registerNewAccount(acct);
+        }
         //Handler Implementation Manual Tests
-        if(SocialMediaController.test==true){
+        if(handlerTests){
             Context ctx=null;
                 //Handler 1 
                     try {

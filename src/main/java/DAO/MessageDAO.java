@@ -8,28 +8,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageDAO {
+    public static boolean test = true;
 
-    //User Story 3
+    //User Story 3 method
     public Message createMessage(int posted_by, String message_text, long time_posted_epoch){
         Connection conn = ConnectionUtil.getConnection();
-        try{
-            String sql = "INSERT INTO message (posted_by,message_text,time_posted_epoch) VALUES (?,?,?)";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, posted_by);
-            ps.setString(2, message_text);
-            ps.setLong(1, time_posted_epoch);
-            ps.executeUpdate();
-            ResultSet pkeys = ps.getGeneratedKeys();
-            pkeys.next();
-            int generated_account_id = (int) pkeys.getInt(1);
-            return new Message(generated_account_id, posted_by, message_text, time_posted_epoch);
-        }catch(SQLException e){
-            System.out.println(e.getMessage());
+        //AccountDAO method access
+        AccountDAO accDao = new AccountDAO();
+        if(message_text.length()<=255 && accDao.checkAccountExistsByID(posted_by)){
+            try{
+                String sql = "INSERT INTO message (posted_by,message_text,time_posted_epoch) VALUES (?,?,?)";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setInt(1, posted_by);
+                ps.setString(2, message_text);
+                ps.setLong(1, time_posted_epoch);
+                ps.executeUpdate();
+                ResultSet pkeys = ps.getGeneratedKeys();
+                pkeys.next();
+                int generated_account_id = (int) pkeys.getInt(1);
+                return new Message(generated_account_id, posted_by, message_text, time_posted_epoch);
+            }catch(SQLException e){
+                System.out.println(e.getMessage());
+            }
         }
         return null;
     }
 
-    //User Story 5
+    //User Story 5 method
     public Message getMessageByID(int id){
         Connection conn = ConnectionUtil.getConnection();
         try{
@@ -49,7 +54,7 @@ public class MessageDAO {
         }
         return null;    }
 
-    //User Story 6
+    //User Story 6 method
     public void deleteMessageByID(int id){
         Connection conn = ConnectionUtil.getConnection();
         try{
@@ -62,7 +67,7 @@ public class MessageDAO {
         }
     }
 
-    //User Story 7
+    //User Story 7 method
     public Message updateMessageByID(int id, String text){
         Connection conn = ConnectionUtil.getConnection();
         try{
@@ -79,7 +84,7 @@ public class MessageDAO {
         return null;
     }
 
-    //User Story 8 
+    //User Story 8 method
     public List<Message> getMessagesByUserID(int id){
         Connection conn = ConnectionUtil.getConnection();
         List<Message> messages = new ArrayList<>();
@@ -102,7 +107,7 @@ public class MessageDAO {
         return messages;
     }
 
-    //User Story 4
+    //User Story 4 method
     public List<Message> getAllMessages(){
         Connection conn = ConnectionUtil.getConnection();
         List<Message> messages = new ArrayList<>();

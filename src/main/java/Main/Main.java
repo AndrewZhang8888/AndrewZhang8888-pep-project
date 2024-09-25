@@ -3,6 +3,7 @@ package Main;
 import DAO.*;
 import Model.*;
 import Controller.*;
+import Util.*;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -24,10 +25,40 @@ public class Main {
 
         //DAO Implementation Manual Tests
         if(daoTests){
-            AccountDAO dao = new AccountDAO();
-            Account acct = new Account("china4004", "4004" );
-            dao.registerNewAccount(acct);
+            //AccountDAO tests
+                AccountDAO acc_dao = new AccountDAO();
+                Account acct = new Account("china4004", "4004" );
+                acc_dao.registerNewAccount(acct);
+                //Expect true return value 
+                System.out.println(acc_dao.checkAccountExists(acct));
+                //Expect true return value (id=2)
+                System.out.println(acc_dao.checkAccountExistsByID(2));
+                //Reset Database
+                ConnectionUtil.resetTestDatabase();
+                //Test Database Reset
+                System.out.println(acc_dao.checkAccountExists(acct));
+            
+            //MessageDAO tests
+                MessageDAO msg_dao = new MessageDAO();
+                Message msg = new Message(1, "Skibidi Dob Dob Yes Yes", 13756890);
+                msg_dao.createMessage(msg.getPosted_by(), msg.getMessage_text(), msg.getTime_posted_epoch());
+                //Expect the message to output "Skibidi Dob Dob Yes Yes"
+                System.out.println(msg_dao.getMessageByID(2).getMessage_text());
+                //Expect there to be two messages posted by user_id 1
+                System.out.println(msg_dao.getMessagesByUserID(1));
+                //Update message two to "John Pork"
+                msg_dao.updateMessageByID(2, "John Pork");
+                System.out.println(msg_dao.getMessageByID(2).getMessage_text());
+                //Delete Message two
+                msg_dao.deleteMessageByID(2);
+                //Get all messages should return only one message
+                System.out.println(msg_dao.getAllMessages());
+                //Reset Database
+                ConnectionUtil.resetTestDatabase();                
         }
+
+
+
         //Handler Implementation Manual Tests
         if(handlerTests){
             Context ctx=null;

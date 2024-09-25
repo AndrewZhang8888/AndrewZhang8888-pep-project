@@ -12,7 +12,7 @@ public class AccountDAO{
     //User Story 1 method
     public Account registerNewAccount(Account acct){
         Connection conn = ConnectionUtil.getConnection();
-        if (checkAccountExists(acct)==false && !acct.getUsername().isEmpty() && acct.getPassword().length()>=4){
+        if (!checkAccountExists(acct) && !acct.getUsername().isEmpty() && acct.getPassword().length()>=4){
             try {
                 String sql = "INSERT INTO account (username,password) VALUES (?,?)";
                 PreparedStatement ps = conn.prepareStatement(sql);

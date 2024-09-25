@@ -10,7 +10,7 @@ import java.util.List;
 public class MessageDAO {
     public static boolean test = true;
 
-    //User Story 3 method
+    //User Story 3 method (Remove Service Logic)
     public Message createMessage(int posted_by, String message_text, long time_posted_epoch){
         Connection conn = ConnectionUtil.getConnection();
         //AccountDAO method access
@@ -18,10 +18,10 @@ public class MessageDAO {
         if(message_text.length()<=255 && accDao.checkAccountExistsByID(posted_by)){
             try{
                 String sql = "INSERT INTO message (posted_by,message_text,time_posted_epoch) VALUES (?,?,?)";
-                PreparedStatement ps = conn.prepareStatement(sql);
+                PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, posted_by);
                 ps.setString(2, message_text);
-                ps.setLong(1, time_posted_epoch);
+                ps.setLong(3, time_posted_epoch);
                 ps.executeUpdate();
                 ResultSet pkeys = ps.getGeneratedKeys();
                 pkeys.next();
@@ -29,12 +29,13 @@ public class MessageDAO {
                 return new Message(generated_account_id, posted_by, message_text, time_posted_epoch);
             }catch(SQLException e){
                 System.out.println(e.getMessage());
+                // System.out.println("lala");
             }
         }
         return null;
     }
 
-    //User Story 5 method
+    //User Story 5 method, User Story 6 Method, User Story 7 Method
     public Message getMessageByID(int id){
         Connection conn = ConnectionUtil.getConnection();
         try{
@@ -71,7 +72,7 @@ public class MessageDAO {
     public Message updateMessageByID(int id, String text){
         Connection conn = ConnectionUtil.getConnection();
         try{
-            String sql = "UPDATE message SET message_text=?, WHERE message_id = ?";
+            String sql = "UPDATE message SET message_text=? WHERE message_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, text);  
             ps.setInt(2, id);

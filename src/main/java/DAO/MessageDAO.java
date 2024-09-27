@@ -53,17 +53,15 @@ public class MessageDAO {
     //User Story 6 DAO Method
     public Message deleteMessageByID(int id){
         Connection conn = ConnectionUtil.getConnection();
-        if (getMessageByID(id)!=null){
-            try{
-                Message del_msg = getMessageByID(id);
-                String sql = "DELETE FROM message WHERE message_id = ?";
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ps.setInt(1, id);
-                ps.executeUpdate();
-                return del_msg;
-            }catch(SQLException e){
-                System.out.println(e.getMessage());
-            }
+        try{
+            Message del_msg = getMessageByID(id);
+            String sql = "DELETE FROM message WHERE message_id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            return del_msg;
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
         }
         return null;
     }

@@ -12,27 +12,44 @@ public class AccountDAO{
     //User Story 1 method
     public Account registerNewAccount(Account acct){
         Connection conn = ConnectionUtil.getConnection();
-        if (!checkAccountExists(acct) && !acct.getUsername().isEmpty() && acct.getPassword().length()>=4){
-            try {
-                String sql = "INSERT INTO account (username,password) VALUES (?,?)";
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ps.setString(1, acct.getUsername());
-                ps.setString(2, acct.getPassword());
-                ps.executeUpdate();
-                ResultSet pkeys = ps.getGeneratedKeys();
-                if(pkeys.next()){
-                    int generated_account_id = (int) pkeys.getInt(1);
-                    return new Account(generated_account_id,acct.getUsername(),acct.getPassword());
-                }
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
+        try {
+            String sql = "INSERT INTO account (username,password) VALUES (?,?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, acct.getUsername());
+            ps.setString(2, acct.getPassword());
+            ps.executeUpdate();
+            ResultSet pkeys = ps.getGeneratedKeys();
+            if(pkeys.next()){
+                int generated_account_id = (int) pkeys.getInt(1);
+                return new Account(generated_account_id,acct.getUsername(),acct.getPassword());
             }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
         return null;
     }
 
-    //User Story 2 method
+    //User Story 1 method (only checking username is necessary)
     public boolean checkAccountExists(Account acct){
+        Connection conn = ConnectionUtil.getConnection();
+        try{
+            // String sql = "SELECT * FROM account WHERE username=? AND password=?";
+            String sql = "SELECT * FROM account WHERE username=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, acct.getUsername());
+            // ps.setString(2, acct.getPassword());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                return true;
+            }
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+    //User Story 2 method 
+    public boolean checkAccountCredentials(Account acct){
         Connection conn = ConnectionUtil.getConnection();
         try{
             String sql = "SELECT * FROM account WHERE username=? AND password=?";

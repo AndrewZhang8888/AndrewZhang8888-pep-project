@@ -31,11 +31,13 @@ public class Main {
                 acc_dao.registerNewAccount(acct);
                 //Expect true return value 
                 System.out.println(acc_dao.checkAccountExists(acct));
+                //Expect true return value
+                System.out.println(acc_dao.checkAccountCredentials(acct));
                 //Expect true return value (id=2)
                 System.out.println(acc_dao.checkAccountExistsByID(2));
                 //Reset Database
                 ConnectionUtil.resetTestDatabase();
-                //Test Database Reset
+                //Test Database Reset (expect false value)
                 System.out.println(acc_dao.checkAccountExists(acct));
             
             //MessageDAO tests

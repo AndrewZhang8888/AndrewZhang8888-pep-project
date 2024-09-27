@@ -11,19 +11,17 @@ public class AccountService {
         accountDAO = new AccountDAO();
     }
 
-    //User Story 1 
+    //User Story 1 Service Method
     public Account registerUser(Account acct){
-        if (!accountDAO.checkAccountExists(acct) && !acct.getUsername().isEmpty() && acct.getPassword().length()>=4){
-            accountDAO.registerNewAccount(acct);
+        if (!accountDAO.checkUserExists(acct) && !acct.getUsername().isEmpty() && acct.getPassword().length()>=4){
+            Account acc_ret = accountDAO.registerNewAccount(acct);
+            return acc_ret;
         }
         return null;
     }
 
-    //User Story 2
+    //User Story 2 Service Method
     public Account loginUser(Account acct){
-        if(accountDAO.checkAccountCredentials(acct)){
-            return acct;
-        }
-        return null;
+        return accountDAO.checkAccountCredentials(acct);
     }
 }

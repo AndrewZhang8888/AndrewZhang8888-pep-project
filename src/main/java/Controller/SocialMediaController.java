@@ -1,10 +1,13 @@
 package Controller;
 
 import Main.Main;
+import Model.*;
+import Service.*;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.*;
 
 /**
@@ -13,6 +16,14 @@ import com.fasterxml.jackson.annotation.*;
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
 public class SocialMediaController {
+    private AccountService acct_serv;
+    private MessageService msg_serv;
+
+    public SocialMediaController(){
+        this.acct_serv = new AccountService();
+        this.msg_serv = new MessageService();
+    }
+
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
      * suite must receive a Javalin object from this method.
@@ -39,16 +50,34 @@ public class SocialMediaController {
     boolean test = Main.handlerTests;
     //Handler method implementation
     public void registerUserHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper om = new ObjectMapper();
+        Account acct = om.readValue(ctx.body(), Account.class);
+        Account registeredUser = acct_serv.registerUser(acct);
+        if(registeredUser!=null){
+            ctx.json(om.writeValueAsString(registeredUser));
+        } else{
+            ctx.status(400);
+        }
         //Test if handler testing activated 
         if (test==true){
             System.out.println("Handler_1_Success");
         }
     }
+
     public void loginUserHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper om = new ObjectMapper();
+        Account acct = om.readValue(ctx.body(), Account.class);
+        Account loggedInUser = acct_serv.loginUser(acct);
+        if(loggedInUser!=null){
+            ctx.json(om.writeValueAsString(loggedInUser));
+        } else{
+            ctx.status(401);
+        }
         if (test==true){
             System.out.println("Handler_2_Success");
         }
     }
+    
     public void createMessageHandler(Context ctx) throws JsonProcessingException {
         if (test==true){
             System.out.println("Handler_3_Success");

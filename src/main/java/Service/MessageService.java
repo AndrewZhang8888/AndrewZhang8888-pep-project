@@ -54,6 +54,6 @@ public class MessageService {
 
     //User story 8 Service Method 
     public List<Message> getAllMessagesByUserId(int id){
-        return msg_dao.getAllMessages();
+        return msg_dao.getMessagesByUserID(id);
     }
 }

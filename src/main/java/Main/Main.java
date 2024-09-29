@@ -16,7 +16,7 @@ import io.javalin.http.Context;
  */
 public class Main {
     //Enable Tests to Run
-    public static boolean serviceTests = false;
+    public static boolean serviceTests = true;
     public static boolean handlerTests = false;
     public static boolean daoTests = false;
     //Manual Tests
@@ -70,6 +70,12 @@ public class Main {
                 //After we update message id=2, we should see the message "Chong pork pay accepted!"
                 msg_serv.updateMessage(2, "Chong pork pay is accepted!");
                 System.out.println(msg_serv.getAllMessages());  
+                //Expect a null value
+                System.out.println(msg_serv.getMessage(1));
+                //Expect a null value
+                System.out.println(msg_serv.getAllMessagesByUserId(3));
+                //Reset Database
+                ConnectionUtil.resetTestDatabase();
         }
 
         //DAO Implementation Manual Tests

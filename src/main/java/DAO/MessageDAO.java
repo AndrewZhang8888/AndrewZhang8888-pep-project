@@ -48,7 +48,8 @@ public class MessageDAO {
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
-        return null;    }
+        return null;    
+    }
 
     //User Story 6 DAO Method
     public Message deleteMessageByID(int id){
@@ -60,7 +61,7 @@ public class MessageDAO {
             ps.setInt(1, id);
             ps.executeUpdate();
             return del_msg;
-        }catch(SQLException e){
+        }catch(Exception e){
             System.out.println(e.getMessage());
         }
         return null;
